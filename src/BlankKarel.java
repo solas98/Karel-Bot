@@ -22,6 +22,7 @@ public class BlankKarel extends SuperKarel {
         testXAxis();
         returnHome();
         testYAxis();
+        System.out.println("---------------");
         countSteps = 0;
     }
 

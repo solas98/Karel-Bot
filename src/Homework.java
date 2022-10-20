@@ -15,6 +15,7 @@ public class Homework extends SuperKarel {
         testXAxis();
         returnHome();
         testYAxis();
+        System.out.println("---------------");
         countSteps = 0;
     }
     //Count Steps Function
