@@ -16,16 +16,18 @@ public class BlankKarel extends SuperKarel {
     public int resultX;
     public int resultY;
 
+    public int countSteps = 0;
+
     public void run() {
         testXAxis();
         returnHome();
         testYAxis();
-
-
-
     }
 
-
+    public void countKarelSteps(){
+        countSteps++;
+        System.out.println("Karel made :"+countSteps+" steps");
+    }
 
     //Check the X Axis for the middle points.
     public void testXAxis() {
@@ -36,16 +38,22 @@ public class BlankKarel extends SuperKarel {
         //Count the X lines
         while (frontIsClear()) {
             move();
+            countKarelSteps();
             countX++;
         }
-        if (countX == 1 || countX == 0) return;
+        if (countX == 1 || countX == 0) {
+            countX = 0;
+            return;
+        }
+
         else if (countX == 2) {
             turnAround();
             move();
+            countKarelSteps();
             putBeeper();
             turnRight();
             while (frontIsClear()){move();putBeeper();}
-            
+
             countX = 0;
             return;
         }
@@ -56,17 +64,14 @@ public class BlankKarel extends SuperKarel {
                 move();
             }
             putBeeper();
-            turnAround();
-            move();
-            putBeeper();
+            turnMovePut();
             putBeepersVertical();
         } else if (this.resultX == 1) {
             turnAround();
             for (int i = 0; i <= (countX / 2) - 1; i++) {
                 move();
             }
-            turnRight();
-            turnRight();
+            turnAround();
             putBeeper();
             putBeepersVertical();
         }
@@ -84,11 +89,9 @@ public class BlankKarel extends SuperKarel {
             move();
             countY++;
         }
-        if (this.countY == 1 || this.countY == 0) return;
+        if (this.countY == 1 || this.countY == 0){ countY=0; return;}
         else if (countY == 2) {
-            turnAround();
-            move();
-            putBeeper();
+            turnMovePut();
             turnLeft();
             while (frontIsClear()){move();putBeeper();}
             countY = 0;
@@ -101,17 +104,14 @@ public class BlankKarel extends SuperKarel {
                 move();
             }
             putBeeper();
-            turnAround();
-            move();
-            putBeeper();
+            turnMovePut();
             putBeepersHorizontally();
         } else if (this.resultY == 1) {
             turnAround();
             for (int i = 0; i <= countY / 2 - 1; i++) {
                 move();
             }
-            turnRight();
-            turnRight();
+            turnAround();
             putBeeper();
             putBeepersHorizontally();
 
@@ -125,11 +125,7 @@ public class BlankKarel extends SuperKarel {
             return;
         }
         turnLeft();
-
-        while (frontIsClear()) {
-            move();
-            putBeeper();
-        }
+        moveAndPut();
         turnLeft();
         if (resultX == 1) {
             return;
@@ -137,20 +133,14 @@ public class BlankKarel extends SuperKarel {
         move();
         turnLeft();
         putBeeper();
-        while (frontIsClear()) {
-            move();
-            putBeeper();
-        }
+        moveAndPut();
 
     }
 
     public void putBeepersHorizontally() {
         if (rightIsBlocked() && leftIsBlocked()) return;
         turnRight();
-        while (frontIsClear()) {
-            move();
-            putBeeper();
-        }
+        moveAndPut();
         turnRight();
         if (this.resultY != 0) {
             return;
@@ -158,49 +148,83 @@ public class BlankKarel extends SuperKarel {
         move();
         turnRight();
         putBeeper();
+        moveAndPut();
+    }
+
+
+    public void moveAndPut(){
         while (frontIsClear()) {
             move();
             putBeeper();
         }
     }
-
-    public void returnHome() {
-        if (facingSouth()) {
-            turnRight();
-            while ((frontIsClear())) {
-                move();
-            }
-            turnRight();
-            turnRight();
-        } else if (facingWest()) {
-            turnLeft();
-            while (frontIsClear()) {
-                move();
-            }
-            turnRight();
-            while ((frontIsClear())) {
-                move();
-            }
-            turnRight();
-            turnRight();
-        } else if (facingNorth()) {
-            turnRight();
-            turnRight();
-            while ((frontIsClear())) {
-                move();
-            }
-            if (facingSouth()) {
-                turnRight();
-                while ((frontIsClear())) {
-                    move();
-                }
-                turnRight();
-                turnRight();
-        }
-
+    
+    public void turnMovePut(){
+        turnAround();
+        move();
+        putBeeper();
     }
 
-}}
+
+
+
+
+
+    public void returnHome() {
+             returnFromSouth();
+             returnFromWest();
+             returnFromNorth();
+             returnFromEast();
+    }
+
+
+
+    public void returnFromSouth(){
+        if (facingSouth()) {
+            turnRight();
+            moveForward();
+//            turnRight();
+//            turnRight();
+            turnAround();
+        }
+    }
+
+    public void returnFromWest(){
+        if (facingWest()) {
+            turnLeft();
+            moveForward();
+            turnRight();
+            moveForward();
+//            turnRight();
+//            turnRight();
+            turnAround();
+    }
+    }
+    public void returnFromNorth(){
+        if (facingNorth()) {
+//            turnRight();
+//            turnRight();
+            turnAround();
+            moveForward();
+    }
+            returnFromSouth();
+}
+    public void returnFromEast(){
+        if (facingEast()){
+            turnAround();
+            moveForward();
+            turnAround();
+        }
+    }
+    
+    public void moveForward(){
+        while (frontIsClear()){
+            move();
+        }
+    }
+
+
+}
 
 
 
