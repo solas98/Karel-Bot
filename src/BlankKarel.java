@@ -22,11 +22,12 @@ public class BlankKarel extends SuperKarel {
         testXAxis();
         returnHome();
         testYAxis();
+        countSteps = 0;
     }
 
-    public void countKarelSteps(){
+    public void countKarelSteps() {
         countSteps++;
-        System.out.println("Karel made :"+countSteps+" steps");
+        System.out.println("Karel made :" + countSteps + " steps");
     }
 
     //Check the X Axis for the middle points.
@@ -35,25 +36,20 @@ public class BlankKarel extends SuperKarel {
         if (frontIsBlocked()) {
             return;
         }
-        //Count the X lines
+        //Count  X
         while (frontIsClear()) {
-            move();
-            countKarelSteps();
+            moveAndCountSteps();
             countX++;
         }
         if (countX == 1 || countX == 0) {
             countX = 0;
             return;
-        }
-
-        else if (countX == 2) {
+        } else if (countX == 2) {
             turnAround();
-            move();
-            countKarelSteps();
+            moveAndCountSteps();
             putBeeper();
             turnRight();
-            while (frontIsClear()){move();putBeeper();}
-
+            moveAndPut();
             countX = 0;
             return;
         }
@@ -61,7 +57,7 @@ public class BlankKarel extends SuperKarel {
         if (this.resultX == 0) {
             turnAround();
             for (int i = 0; i <= countX / 2; i++) {
-                move();
+                moveAndCountSteps();
             }
             putBeeper();
             turnMovePut();
@@ -69,7 +65,7 @@ public class BlankKarel extends SuperKarel {
         } else if (this.resultX == 1) {
             turnAround();
             for (int i = 0; i <= (countX / 2) - 1; i++) {
-                move();
+                moveAndCountSteps();
             }
             turnAround();
             putBeeper();
@@ -79,21 +75,23 @@ public class BlankKarel extends SuperKarel {
 
     }
 
-
+    //Check the YAxis for the middle points.
     public void testYAxis() {
         //for small maps that divide in less than 4 sections
         if (leftIsBlocked() && rightIsBlocked()) return;
         turnLeft();
 
         while (frontIsClear()) {
-            move();
+            moveAndCountSteps();
             countY++;
         }
-        if (this.countY == 1 || this.countY == 0){ countY=0; return;}
-        else if (countY == 2) {
+        if (this.countY == 1 || this.countY == 0) {
+            countY = 0;
+            return;
+        } else if (countY == 2) {
             turnMovePut();
             turnLeft();
-            while (frontIsClear()){move();putBeeper();}
+            moveAndPut();
             countY = 0;
             return;
         }
@@ -101,7 +99,7 @@ public class BlankKarel extends SuperKarel {
         if (this.resultY == 0) {
             turnAround();
             for (int i = 0; i <= countY / 2; i++) {
-                move();
+                moveAndCountSteps();
             }
             putBeeper();
             turnMovePut();
@@ -109,7 +107,7 @@ public class BlankKarel extends SuperKarel {
         } else if (this.resultY == 1) {
             turnAround();
             for (int i = 0; i <= countY / 2 - 1; i++) {
-                move();
+                moveAndCountSteps();
             }
             turnAround();
             putBeeper();
@@ -131,6 +129,7 @@ public class BlankKarel extends SuperKarel {
             return;
         }
         move();
+        countKarelSteps();
         turnLeft();
         putBeeper();
         moveAndPut();
@@ -146,83 +145,80 @@ public class BlankKarel extends SuperKarel {
             return;
         }
         move();
+        countKarelSteps();
         turnRight();
         putBeeper();
         moveAndPut();
     }
+    
+    public void moveAndCountSteps(){
+        move();
+        countKarelSteps();
+    }
 
 
-    public void moveAndPut(){
+    public void moveAndPut() {
         while (frontIsClear()) {
-            move();
+            moveAndCountSteps();
             putBeeper();
         }
     }
-    
-    public void turnMovePut(){
+
+    public void turnMovePut() {
         turnAround();
         move();
+        countKarelSteps();
         putBeeper();
     }
 
 
-
-
-
-
     public void returnHome() {
-             returnFromSouth();
-             returnFromWest();
-             returnFromNorth();
-             returnFromEast();
+        returnFromSouth();
+        returnFromWest();
+        returnFromNorth();
+        returnFromEast();
     }
 
 
-
-    public void returnFromSouth(){
+    public void returnFromSouth() {
         if (facingSouth()) {
             turnRight();
             moveForward();
-//            turnRight();
-//            turnRight();
             turnAround();
         }
     }
 
-    public void returnFromWest(){
+    public void returnFromWest() {
         if (facingWest()) {
             turnLeft();
             moveForward();
             turnRight();
             moveForward();
-//            turnRight();
-//            turnRight();
             turnAround();
-    }
-    }
-    public void returnFromNorth(){
-        if (facingNorth()) {
-//            turnRight();
-//            turnRight();
-            turnAround();
-            moveForward();
-    }
-            returnFromSouth();
-}
-    public void returnFromEast(){
-        if (facingEast()){
-            turnAround();
-            moveForward();
-            turnAround();
-        }
-    }
-    
-    public void moveForward(){
-        while (frontIsClear()){
-            move();
         }
     }
 
+    public void returnFromNorth() {
+        if (facingNorth()) {
+            turnAround();
+            moveForward();
+        }
+        returnFromSouth();
+    }
+
+    public void returnFromEast() {
+        if (facingEast()) {
+            turnAround();
+            moveForward();
+            turnAround();
+        }
+    }
+
+    public void moveForward() {
+        while (frontIsClear()) {
+            moveAndCountSteps();
+        }
+    }
 
 }
 
